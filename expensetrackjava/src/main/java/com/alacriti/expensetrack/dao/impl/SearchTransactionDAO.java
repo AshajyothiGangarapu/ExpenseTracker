@@ -37,15 +37,16 @@ public class SearchTransactionDAO extends BaseDAO {
 			rs = stmt.executeQuery();
 			list = new ArrayList<SearchTransaction>();
 			while (rs.next()) {
+				SearchTransaction searchTrans= new SearchTransaction();
 
-				searchTransc.setAccountNumber(rs.getLong("account_number"));
-				searchTransc.setNickName(rs.getString("nick_name"));
-				searchTransc.setCategory(rs.getString("Category_name"));
-				searchTransc.setDescription(rs.getString("description"));
-				searchTransc.setAmount(rs.getDouble("amount"));
-				searchTransc.setDate(rs.getString("date"));
-				list.add(searchTransc);
-
+				searchTrans.setAccountNumber(rs.getLong("account_number"));
+				searchTrans.setNickName(rs.getString("nick_name"));
+				searchTrans.setCategory(rs.getString("Category_name"));
+				searchTrans.setDescription(rs.getString("description"));
+				searchTrans.setAmount(rs.getDouble("amount"));
+				searchTrans.setDate(rs.getString("date"));
+				list.add(searchTrans);
+				
 			}
 
 		} catch (SQLException e) {
@@ -66,25 +67,27 @@ public class SearchTransactionDAO extends BaseDAO {
 
 		try {
 			String sqlCmd = "select b.account_number,b.nick_name,category_name,description,amount,date "
-					+ "from ashajyothig_expensetracker_transaction_info a"
-					+ "inner join ashajyothig_expensetracker_account_info b on a.account_id=b.account_id "
-					+ "and a.category_name like ?  and "
-					+ "b.customer_id=(select customer_id from ashajyothig_expensetracker_customer_information"
-					+ "where login_id='al245')";
+					+ " from ashajyothig_expensetracker_transaction_info a"
+					+ " inner join ashajyothig_expensetracker_account_info b on a.account_id=b.account_id "
+					+ " and a.category_name like ?  and "
+					+ " b.customer_id=(select customer_id from ashajyothig_expensetracker_customer_information"
+					+ " where login_id='al245')";
 
 			stmt = getPreparedStatementTopCategories(getConnection(), sqlCmd);
 			stmt.setString(1, "%" + searchTransc.getSearchValue() + "%");
+			System.out.println(searchTransc.getSearchValue());
 			rs = stmt.executeQuery();
 			list = new ArrayList<SearchTransaction>();
 			while (rs.next()) {
+				SearchTransaction searchTrans= new SearchTransaction();
 
-				searchTransc.setAccountNumber(rs.getLong("account_number"));
-				searchTransc.setNickName(rs.getString("nick_name"));
-				searchTransc.setCategory(rs.getString("Category_name"));
-				searchTransc.setDescription(rs.getString("description"));
-				searchTransc.setAmount(rs.getDouble("amount"));
-				searchTransc.setDate(rs.getString("date"));
-				list.add(searchTransc);
+				searchTrans.setAccountNumber(rs.getLong("account_number"));
+				searchTrans.setNickName(rs.getString("nick_name"));
+				searchTrans.setCategory(rs.getString("Category_name"));
+				searchTrans.setDescription(rs.getString("description"));
+				searchTrans.setAmount(rs.getDouble("amount"));
+				searchTrans.setDate(rs.getString("date"));
+				list.add(searchTrans);
 
 			}
 
@@ -118,14 +121,15 @@ public class SearchTransactionDAO extends BaseDAO {
 			rs = stmt.executeQuery();
 			list = new ArrayList<SearchTransaction>();
 			while (rs.next()) {
+				SearchTransaction searchTrans= new SearchTransaction();
 
-				searchTransc.setAccountNumber(rs.getLong("account_number"));
-				searchTransc.setNickName(rs.getString("nick_name"));
-				searchTransc.setCategory(rs.getString("Category_name"));
-				searchTransc.setDescription(rs.getString("description"));
-				searchTransc.setAmount(rs.getDouble("amount"));
-				searchTransc.setDate(rs.getString("date"));
-				list.add(searchTransc);
+				searchTrans.setAccountNumber(rs.getLong("account_number"));
+				searchTrans.setNickName(rs.getString("nick_name"));
+				searchTrans.setCategory(rs.getString("Category_name"));
+				searchTrans.setDescription(rs.getString("description"));
+				searchTrans.setAmount(rs.getDouble("amount"));
+				searchTrans.setDate(rs.getString("date"));
+				list.add(searchTrans);
 
 			}
 

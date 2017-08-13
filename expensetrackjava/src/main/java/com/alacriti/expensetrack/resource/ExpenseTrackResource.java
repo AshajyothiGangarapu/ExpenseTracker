@@ -1,11 +1,14 @@
 package com.alacriti.expensetrack.resource;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -17,6 +20,7 @@ import com.alacriti.expensetrack.biz.delegate.TopSpendsDelegate;
 import com.alacriti.expensetrack.model.vo.CustomerInformation;
 import com.alacriti.expensetrack.model.vo.ExpenseInformation;
 import com.alacriti.expensetrack.model.vo.SearchTransaction;
+import com.alacriti.expensetrack.util.SessionUtil;
 
 @Path("/customer")
 public class ExpenseTrackResource {
@@ -28,6 +32,17 @@ public class ExpenseTrackResource {
 		CustomerInformationDelegate customerInfoDelegate = new CustomerInformationDelegate();
 		customerInfoDelegate.addCustomerDetails(customerInfo);
 		return Response.status(200).entity(customerInfo).build();
+	}
+
+	@GET
+	@Path("/session")
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean checkSessoin(@Context HttpServletRequest request) {
+		if (request.getSession(false) != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@POST
@@ -75,10 +90,14 @@ public class ExpenseTrackResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getSearchDetails(SearchTransaction searchTransaction) {
+		System.out.println(searchTransaction.getSearchValue() + " : "
+				+ searchTransaction.getSelectOption());
 		SearchTransactionDelegate searchTransactionDelegate = new SearchTransactionDelegate();
 		searchTransactionDelegate.getSearchDetails(searchTransaction);
-		return Response.ok()
-				.entity(searchTransactionDelegate.getSearchDetails(searchTransaction)).build();
+		return Response
+				.ok()
+				.entity(searchTransactionDelegate
+						.getSearchDetails(searchTransaction)).build();
 
 	}
 
@@ -89,8 +108,10 @@ public class ExpenseTrackResource {
 	public Response getSearchOnDate(SearchTransaction searchTransaction) {
 		SearchTransactionDelegate searchTransactionDelegate = new SearchTransactionDelegate();
 		searchTransactionDelegate.getSearchOnDate(searchTransaction);
-		return Response.ok()
-				.entity(searchTransactionDelegate.getSearchOnDate(searchTransaction)).build();
+		return Response
+				.ok()
+				.entity(searchTransactionDelegate
+						.getSearchOnDate(searchTransaction)).build();
 
 	}
 }

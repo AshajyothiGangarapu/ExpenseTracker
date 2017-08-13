@@ -19,11 +19,11 @@ public class SearchTransactionBO extends BaseBO {
 			
 			SearchTransactionDAO searchTranscDAO = new SearchTransactionDAO(
 					getConnection());
-			if(searchTransc.getSelectOption()==1){
+			if(searchTransc.getSelectOption()==2){
 			 searchInfoList = searchTranscDAO
 					.getTransactionsOnAccountNumber(searchTransc);
 			}
-			else
+			else if(searchTransc.getSelectOption()==1)
 				searchInfoList = searchTranscDAO
 				.getTransactionsOnCategoryName(searchTransc);
 
