@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.alacriti.expensetrack.model.vo.CustomerInformation;
+import com.alacriti.expensetrack.model.vo.Validation;
 
 public class CustomerInformationDAO extends BaseDAO {
 	public CustomerInformationDAO() {
@@ -44,11 +45,12 @@ public class CustomerInformationDAO extends BaseDAO {
 		}
 	}
 
-	public boolean getCustomerDetails(CustomerInformation customerInfo)
+	public Validation getCustomerDetails(CustomerInformation customerInfo)
 			throws DAOException {
 		Statement stmt = null;
 		ResultSet rs = null;
 		boolean flag = false;
+		Validation validation=null;
 
 		try {
 			String loginId = customerInfo.getLoginId();
@@ -56,11 +58,14 @@ public class CustomerInformationDAO extends BaseDAO {
 			String sqlCmd ="select  password from ashajyothig_expensetracker_customer_information where login_id='"+loginId+"'";
 			stmt = getPreparedStatementGetUserRole(getConnection(),sqlCmd);
 			rs = stmt.executeQuery(sqlCmd);
+			//validation=new Validation();
 			if (rs.next()) {
 				if (password.equals(rs.getString("password"))) {
 					System.out.println("Successfully Logged in***" +loginId);
 					flag = true;
+					validation=new Validation(true, loginId);
 				} else {
+					validation=new Validation(false, loginId);
 					System.out.println("Invalid Password");
 				}
 
@@ -70,7 +75,7 @@ public class CustomerInformationDAO extends BaseDAO {
 		} finally {
 			close(stmt);
 		}
-		return flag;
+		return validation;
 	}
 
 	public Statement getPreparedStatementGetUserRole(Connection connection,

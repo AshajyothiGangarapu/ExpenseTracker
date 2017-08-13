@@ -20,6 +20,7 @@ import com.alacriti.expensetrack.biz.delegate.TopSpendsDelegate;
 import com.alacriti.expensetrack.model.vo.CustomerInformation;
 import com.alacriti.expensetrack.model.vo.ExpenseInformation;
 import com.alacriti.expensetrack.model.vo.SearchTransaction;
+import com.alacriti.expensetrack.model.vo.Validation;
 import com.alacriti.expensetrack.util.SessionUtil;
 
 @Path("/customer")
@@ -34,16 +35,28 @@ public class ExpenseTrackResource {
 		return Response.status(200).entity(customerInfo).build();
 	}
 
-	@GET
+	/*@GET
 	@Path("/session")
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean checkSessoin(@Context HttpServletRequest request) {
-		if (request.getSession(false) != null) {
+		
+		if (request.getSession(false) == null) {
 			return true;
 		} else {
 			return false;
 		}
+	}*/
+	@GET
+	@Path("/session")
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean checkSessoin(@Context HttpServletRequest request)
+	{
+		SessionUtil sessionUtility=new SessionUtil();
+	HttpSession session= request.getSession(false);
+	System.out.println("session in checkSession :"+session);
+	return sessionUtility.checkForSession(session);
 	}
+	
 
 	@POST
 	@Path("/addExpenses")
@@ -59,8 +72,12 @@ public class ExpenseTrackResource {
 	@Path("/getLoginDetails")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean getCustomerDetails(CustomerInformation customerInfo) {
+	public Validation getCustomerDetails(CustomerInformation customerInfo,@Context HttpServletRequest request) {
 		CustomerInformationDelegate customerInfoDelegate = new CustomerInformationDelegate();
+		if(customerInfoDelegate.getCustomerDetails(customerInfo).isValidUser())
+		{
+			HttpSession session= request.getSession();
+		}
 		return customerInfoDelegate.getCustomerDetails(customerInfo);
 
 	}

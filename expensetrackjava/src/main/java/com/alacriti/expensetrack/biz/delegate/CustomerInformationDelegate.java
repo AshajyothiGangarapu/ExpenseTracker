@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import com.alacriti.expensetrack.bo.impl.CustomerInformationBO;
 import com.alacriti.expensetrack.model.vo.CustomerInformation;
+import com.alacriti.expensetrack.model.vo.Validation;
 
 public class CustomerInformationDelegate extends BaseDelegate {
 
@@ -24,9 +25,10 @@ public class CustomerInformationDelegate extends BaseDelegate {
 		}
 
 	}
-	public boolean getCustomerDetails(CustomerInformation customerInfo) {
+	public Validation getCustomerDetails(CustomerInformation customerInfo) {
 		boolean rollBack = false;
 		boolean flag=false;
+		Validation validation=null;
 		Connection connection = null;
 		try {
 			connection = startDBTransaction();
@@ -35,7 +37,7 @@ public class CustomerInformationDelegate extends BaseDelegate {
 			System.out.println("Stil in delegete");
 			CustomerInformationBO customerInfoBO= new CustomerInformationBO(getConnection());
 			System.out.println("still in delegate 2");
-			flag=customerInfoBO.getCustomerDefaults(customerInfo);
+			validation=customerInfoBO.getCustomerDefaults(customerInfo);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,7 +45,7 @@ public class CustomerInformationDelegate extends BaseDelegate {
 		} finally {
 			endDBTransaction(connection, rollBack);
 			
-		}return flag;
+		}return validation;
 
 	}
 }

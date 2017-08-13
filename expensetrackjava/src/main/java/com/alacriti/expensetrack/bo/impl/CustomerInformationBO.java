@@ -5,6 +5,7 @@ import java.sql.Connection;
 import com.alacriti.expensetrack.dao.impl.CustomerInformationDAO;
 import com.alacriti.expensetrack.dao.impl.DAOException;
 import com.alacriti.expensetrack.model.vo.CustomerInformation;
+import com.alacriti.expensetrack.model.vo.Validation;
 
 public class CustomerInformationBO extends BaseBO {
 	public CustomerInformationBO() {
@@ -29,21 +30,22 @@ public class CustomerInformationBO extends BaseBO {
 		}
 	}
 
-	public boolean getCustomerDefaults(CustomerInformation customerInfo)
+	public Validation getCustomerDefaults(CustomerInformation customerInfo)
 			throws DAOException, BOException {
+		Validation validation=null;
 		boolean flag=false;
 
 		try {
 			CustomerInformationDAO customerInfoDAO = new CustomerInformationDAO(
 					getConnection());
-			flag=customerInfoDAO.getCustomerDetails(customerInfo);
+			validation=customerInfoDAO.getCustomerDetails(customerInfo);
 		
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BOException();
 		}
-		return flag;
+		return validation;
 	}
 
 }
