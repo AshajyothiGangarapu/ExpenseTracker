@@ -20,21 +20,20 @@ public class CustomerInformationDAO extends BaseDAO {
 
 	public void addCustomerDetails(CustomerInformation customerInfo)
 			throws DAOException {
-		// log.debugPrintCurrentMethodName();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
 			String sqlCmd = "sqlCmd";
 
-			stmt = getPreparedStatementCreateUserRole(getConnection(), sqlCmd);
+			stmt = getPreparedStatementCreateCustomer(getConnection(), sqlCmd);
 			stmt.setString(1, customerInfo.getFirstName());
 			stmt.setString(2, customerInfo.getLastName());
 			stmt.setString(3, customerInfo.getEmailId());
 			stmt.setDate(4, customerInfo.getDateOfBirth());
 			stmt.setString(5, customerInfo.getLoginId());
 			stmt.setString(6, customerInfo.getPassword());
-			// log.logDebug("reached here********");
+			
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -49,20 +48,18 @@ public class CustomerInformationDAO extends BaseDAO {
 			throws DAOException {
 		Statement stmt = null;
 		ResultSet rs = null;
-		boolean flag = false;
 		Validation validation=null;
 
 		try {
 			String loginId = customerInfo.getLoginId();
 			String password = customerInfo.getPassword();
 			String sqlCmd ="select  password from ashajyothig_expensetracker_customer_information where login_id='"+loginId+"'";
-			stmt = getPreparedStatementGetUserRole(getConnection(),sqlCmd);
+			stmt = getPreparedStatementGetCustomer(getConnection(),sqlCmd);
 			rs = stmt.executeQuery(sqlCmd);
 			//validation=new Validation();
 			if (rs.next()) {
 				if (password.equals(rs.getString("password"))) {
 					System.out.println("Successfully Logged in***" +loginId);
-					flag = true;
 					validation=new Validation(true, loginId);
 				} else {
 					validation=new Validation(false, loginId);
@@ -78,7 +75,7 @@ public class CustomerInformationDAO extends BaseDAO {
 		return validation;
 	}
 
-	public Statement getPreparedStatementGetUserRole(Connection connection,
+	public Statement getPreparedStatementGetCustomer(Connection connection,
 			String sqlCmd) throws SQLException {
 
 		try {
@@ -90,7 +87,7 @@ public class CustomerInformationDAO extends BaseDAO {
 		}
 	}
 
-	public PreparedStatement getPreparedStatementCreateUserRole(
+	public PreparedStatement getPreparedStatementCreateCustomer(
 			Connection connection, String sqlCmd) throws SQLException {
 		try {
 			return connection

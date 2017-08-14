@@ -17,7 +17,7 @@ import com.alacriti.expensetrack.model.vo.AccountInformation;
 @Path("/")
 public class AccountInformationResource {
 	@POST
-	@Path("addAccountInfo")
+	@Path("account")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addaccountDetails(AccountInformation accountInfo) {
@@ -27,7 +27,7 @@ public class AccountInformationResource {
 	}
 
 	@GET
-	@Path("getAccountInfo/{LOGIN_ID}")
+	@Path("account/{LOGIN_ID}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAccountInformation(@PathParam("LOGIN_ID") String loginId, @Context HttpServletRequest request) {
 		System.out

@@ -7,7 +7,9 @@ public class AccountInformation {
 	private int accountId;
 	private long accountNumber;
 	private String nickName;
+	private String loginId;
 
+	
 	public AccountInformation() {
 	}
 
@@ -32,6 +34,13 @@ public class AccountInformation {
 
 	public void setAccountNumber(long accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 
 	public String getNickName() {

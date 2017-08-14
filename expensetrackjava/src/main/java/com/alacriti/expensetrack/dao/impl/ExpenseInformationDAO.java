@@ -25,15 +25,18 @@ public class ExpenseInformationDAO extends BaseDAO {
 		try {
 			String sqlCmd = "insert into ashajyothig_expensetracker_transaction_info "
 					+ "(customer_id,account_id,category_name,description,amount,date)"
-					+ "values((select customer_id from ashajyothig_expensetracker_customer_information where login_id='al245'),"
+					+ "values((select customer_id from ashajyothig_expensetracker_customer_information where login_id=?),"
 					+ "?,?,?,?,?)";
 			
 			stmt =getPreparedStatementExpenseAddition(getConnection(), sqlCmd);
-			stmt.setInt(1, expenseInfo.getAccountId());
-			stmt.setString(2, expenseInfo.getCategory());
-			stmt.setString(3, expenseInfo.getDescription());
-			stmt.setDouble(4,expenseInfo.getPrice());
-			stmt.setString(5, expenseInfo.getDate());
+			stmt.setString(1, expenseInfo.getLoginId());
+			stmt.setInt(2, expenseInfo.getAccountId());
+			stmt.setString(3, expenseInfo.getCategory());
+			stmt.setString(4, expenseInfo.getDescription());
+			stmt.setDouble(5,expenseInfo.getPrice());
+			stmt.setString(6, expenseInfo.getDate());
+			
+			
 			 stmt.executeUpdate();
 			
 		} catch (SQLException e) {

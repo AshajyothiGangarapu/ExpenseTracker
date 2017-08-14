@@ -10,7 +10,9 @@ public class ExpenseInformation {
 	private double price;
 	private String description;
 	private String date;
+	private String loginId;
 
+	
 	public ExpenseInformation() {
 	}
 
@@ -18,7 +20,7 @@ public class ExpenseInformation {
 	}
 
 	public ExpenseInformation(int accountId, String category, String date,
-			double price, String description) {
+			double price, String description, String loginId) {
 		super();
 		this.accountId = accountId;
 
@@ -34,6 +36,14 @@ public class ExpenseInformation {
 	public void setAccountId(int accountId) {
 		this.accountId = accountId;
 	}
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
 
 	public String getCategory() {
 		return category;

@@ -31,7 +31,7 @@ public class TopCategoriesDAO extends BaseDAO {
 					+ " ashajyothig_expensetracker_customer_information where login_id=?)Group By  category_name order by"
 					+ " spend_ratio desc";
 
-			stmt = getPreparedStatementTopCategories(getConnection(), sqlCmd);
+			stmt = getPreparedStatementGetTopCategories(getConnection(), sqlCmd);
 			stmt.setString(1, loginId);
 			stmt.setString(2, loginId);
 			rs = stmt.executeQuery();
@@ -55,7 +55,7 @@ public class TopCategoriesDAO extends BaseDAO {
 		return list;
 	}
 
-	public PreparedStatement getPreparedStatementTopCategories(
+	public PreparedStatement getPreparedStatementGetTopCategories(
 			Connection connection, String sqlCmd) throws SQLException {
 		try {
 			return connection.prepareStatement(sqlCmd);

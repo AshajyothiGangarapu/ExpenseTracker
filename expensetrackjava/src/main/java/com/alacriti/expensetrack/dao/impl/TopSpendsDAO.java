@@ -27,7 +27,7 @@ public class TopSpendsDAO extends BaseDAO {
 			String sqlCmd = "Select category_name, amount  as spend_amount   From ashajyothig_expensetracker_transaction_info "
 					+ " where customer_id=(select customer_id from ashajyothig_expensetracker_customer_information "
 					+ " where login_id=?) order by spend_amount desc LIMIT 5";
-			stmt = getPreparedStatementTopSpends(getConnection(), sqlCmd);
+			stmt = getPreparedStatementGetTopSpends(getConnection(), sqlCmd);
 			stmt.setString(1, loginId);
 
 			rs = stmt.executeQuery();
@@ -53,7 +53,7 @@ public class TopSpendsDAO extends BaseDAO {
 		return list;
 	}
 
-	public PreparedStatement getPreparedStatementTopSpends(
+	public PreparedStatement getPreparedStatementGetTopSpends(
 			Connection connection, String sqlCmd) throws SQLException {
 		try {
 			return connection.prepareStatement(sqlCmd);

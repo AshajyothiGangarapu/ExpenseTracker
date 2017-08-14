@@ -28,11 +28,12 @@ public class AccountInformationDAO extends BaseDAO {
 			String sqlCmd = "insert into ashajyothig_expensetracker_account_info "
 					+ "(customer_id,account_number,nick_name)"
 					+ " values((select customer_id from ashajyothig_expensetracker_customer_information "
-					+ "where login_id='al245'),?,?);";
+					+ "where login_id=?),?,?);";
 
-			stmt = getPreparedStatementCreateUserRole(getConnection(), sqlCmd);
-			stmt.setLong(1, accountInfo.getAccountNumber());
-			stmt.setString(2, accountInfo.getNickName());
+			stmt = getPreparedStatementCreateAccount(getConnection(), sqlCmd);
+			stmt.setString(1, accountInfo.getLoginId());
+			stmt.setLong(2, accountInfo.getAccountNumber());
+			stmt.setString(3, accountInfo.getNickName());
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -43,7 +44,7 @@ public class AccountInformationDAO extends BaseDAO {
 		}
 	}
 
-	public PreparedStatement getPreparedStatementCreateUserRole(
+	public PreparedStatement getPreparedStatementCreateAccount(
 			Connection connection, String sqlCmd) throws SQLException {
 		try {
 			return connection
@@ -64,7 +65,7 @@ public class AccountInformationDAO extends BaseDAO {
 					+ "from ashajyothig_expensetracker_account_info a,"
 					+ " ashajyothig_expensetracker_customer_information b where"
 					+ " a.customer_id=b.customer_id and b.login_id=?";
-			stmt = getPreparedStatementTopCategories(getConnection(), sqlCmd);
+			stmt = getPreparedStatementGetAccountInfo(getConnection(), sqlCmd);
 			stmt.setString(1, loginId);
 			rs = stmt.executeQuery();
 			list = new ArrayList<AccountInformation>();
@@ -88,7 +89,7 @@ public class AccountInformationDAO extends BaseDAO {
 		return list;
 	}
 
-	public PreparedStatement getPreparedStatementTopCategories(
+	public PreparedStatement getPreparedStatementGetAccountInfo(
 			Connection connection, String sqlCmd) throws SQLException {
 		try {
 			return connection.prepareStatement(sqlCmd);

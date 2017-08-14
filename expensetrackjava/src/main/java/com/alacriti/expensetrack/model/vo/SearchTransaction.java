@@ -14,6 +14,8 @@ public class SearchTransaction {
 	private String description;
 	private double amount;
 	private String Date;
+	private String loginId;
+	
 	public SearchTransaction(){}
 	public SearchTransaction(long accountNumber, String nickName,
 			String category, String description, double amount, String date) {
@@ -36,6 +38,12 @@ public class SearchTransaction {
 	}
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
+	}
+	public String getLoginId() {
+		return loginId;
+	}
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 	public String getSearchValue() {
 		return searchValue;

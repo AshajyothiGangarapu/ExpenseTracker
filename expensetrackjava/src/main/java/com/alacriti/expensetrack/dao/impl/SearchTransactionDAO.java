@@ -30,10 +30,11 @@ public class SearchTransactionDAO extends BaseDAO {
 					+ " inner join ashajyothig_expensetracker_account_info b on a.account_id=b.account_id "
 					+ " and b.account_number like ?  and "
 					+ " b.customer_id=(select customer_id from ashajyothig_expensetracker_customer_information"
-					+ " where login_id='al245')";
+					+ " where login_id=?)";
 
-			stmt = getPreparedStatementTopCategories(getConnection(), sqlCmd);
+			stmt = getPreparedStatementGetSearchInfo(getConnection(), sqlCmd);
 			stmt.setString(1, "%" + searchTransc.getSearchValue() + "%");
+			stmt.setString(2, searchTransc.getLoginId());
 			rs = stmt.executeQuery();
 			list = new ArrayList<SearchTransaction>();
 			while (rs.next()) {
@@ -71,10 +72,11 @@ public class SearchTransactionDAO extends BaseDAO {
 					+ " inner join ashajyothig_expensetracker_account_info b on a.account_id=b.account_id "
 					+ " and a.category_name like ?  and "
 					+ " b.customer_id=(select customer_id from ashajyothig_expensetracker_customer_information"
-					+ " where login_id='al245')";
+					+ " where login_id=?)";
 
-			stmt = getPreparedStatementTopCategories(getConnection(), sqlCmd);
+			stmt = getPreparedStatementGetSearchInfo(getConnection(), sqlCmd);
 			stmt.setString(1, "%" + searchTransc.getSearchValue() + "%");
+			stmt.setString(2, searchTransc.getLoginId());
 			System.out.println(searchTransc.getSearchValue());
 			rs = stmt.executeQuery();
 			list = new ArrayList<SearchTransaction>();
@@ -112,12 +114,13 @@ public class SearchTransactionDAO extends BaseDAO {
 					+ "from ashajyothig_expensetracker_transaction_info a"
 					+ " inner join ashajyothig_expensetracker_account_info b on "
 					+ "a.account_id=b.account_id and a.date >= ? and a.date <= ?"
-					+ " order by date and b.customer_id=(select customer_id from ashajyothig_expensetracker_customer_information "
-					+ " where login_id='al245')";
+					+ "  and b.customer_id=(select customer_id from ashajyothig_expensetracker_customer_information "
+					+ " where login_id=?) order by date ";
 
-			stmt = getPreparedStatementTopCategories(getConnection(), sqlCmd);
+			stmt = getPreparedStatementGetSearchInfo(getConnection(), sqlCmd);
 			stmt.setDate(1,searchTransc.getFromDate());
 			stmt.setDate(2,searchTransc.getToDate());
+			stmt.setString(3, searchTransc.getLoginId());
 			rs = stmt.executeQuery();
 			list = new ArrayList<SearchTransaction>();
 			while (rs.next()) {
@@ -144,7 +147,7 @@ public class SearchTransactionDAO extends BaseDAO {
 
 	}
 
-	public PreparedStatement getPreparedStatementTopCategories(
+	public PreparedStatement getPreparedStatementGetSearchInfo(
 			Connection connection, String sqlCmd) throws SQLException {
 		try {
 			return connection.prepareStatement(sqlCmd);
