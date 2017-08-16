@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.alacriti.expensetrack.biz.delegate.CategoryInformationDelegate;
 import com.alacriti.expensetrack.biz.delegate.CustomerInformationDelegate;
 import com.alacriti.expensetrack.biz.delegate.ExpenseInformationDelegate;
 import com.alacriti.expensetrack.biz.delegate.SearchTransactionDelegate;
@@ -21,7 +22,6 @@ import com.alacriti.expensetrack.model.vo.CustomerInformation;
 import com.alacriti.expensetrack.model.vo.ExpenseInformation;
 import com.alacriti.expensetrack.model.vo.SearchTransaction;
 import com.alacriti.expensetrack.model.vo.Validation;
-import com.alacriti.expensetrack.util.SessionUtil;
 
 @Path("/")
 public class ExpenseTrackResource {
@@ -46,13 +46,25 @@ public class ExpenseTrackResource {
 			return false;
 		}
 	}
+	@GET
+	@Path("/logout")
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean destroySessoin(@Context HttpServletRequest request) {
+
+		if (request.getSession(false) != null) {
+			request.getSession().invalidate();
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 
 	@POST
 	@Path("/expenses")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addExpenses(ExpenseInformation expenseInfo) {
+	public Response addExpenses(ExpenseInformation expenseInfo,@Context HttpServletRequest request) {
 		ExpenseInformationDelegate ExpenseInfoDelegate = new ExpenseInformationDelegate();
 		ExpenseInfoDelegate.addExpenses(expenseInfo);
 		return Response.status(200).entity(expenseInfo).build();
@@ -91,6 +103,18 @@ public class ExpenseTrackResource {
 		return Response.ok().entity(topSpendsDelegate.getTopSpends(loginId))
 				.build();
 	}
+	@GET
+	@Path("/category")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCategoryInformation() {
+		System.out
+				.println("In getCategoryInformation() -> CategoryInformationResource");
+		CategoryInformationDelegate categoryInfoDelegate = new CategoryInformationDelegate();
+		return Response.ok()
+				.entity(categoryInfoDelegate.getCategoryInformation())
+				.build();
+	}
+
 
 	@POST
 	@Path("/searchondetails")
