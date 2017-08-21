@@ -29,10 +29,9 @@ public class ExpenseTrackResource {
 	@Path("/customer")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCustomerDetails(CustomerInformation customerInfo) {
+	public boolean addCustomerDetails(CustomerInformation customerInfo) {
 		CustomerInformationDelegate customerInfoDelegate = new CustomerInformationDelegate();
-		customerInfoDelegate.addCustomerDetails(customerInfo);
-		return Response.status(200).entity(customerInfo).build();
+		return customerInfoDelegate.addCustomerDetails(customerInfo);
 	}
 
 	@GET
@@ -46,6 +45,7 @@ public class ExpenseTrackResource {
 			return false;
 		}
 	}
+
 	@GET
 	@Path("/logout")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -59,15 +59,15 @@ public class ExpenseTrackResource {
 		}
 	}
 
-
 	@POST
 	@Path("/expenses")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addExpenses(ExpenseInformation expenseInfo,@Context HttpServletRequest request) {
-		ExpenseInformationDelegate ExpenseInfoDelegate = new ExpenseInformationDelegate();
-		ExpenseInfoDelegate.addExpenses(expenseInfo);
-		return Response.status(200).entity(expenseInfo).build();
+	public boolean addExpenses(ExpenseInformation expenseInfo,
+			@Context HttpServletRequest request) {
+		ExpenseInformationDelegate expenseInfoDelegate = new ExpenseInformationDelegate();
+		return expenseInfoDelegate.addExpenses(expenseInfo);
+
 	}
 
 	@POST
@@ -103,6 +103,7 @@ public class ExpenseTrackResource {
 		return Response.ok().entity(topSpendsDelegate.getTopSpends(loginId))
 				.build();
 	}
+
 	@GET
 	@Path("/category")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -111,10 +112,8 @@ public class ExpenseTrackResource {
 				.println("In getCategoryInformation() -> CategoryInformationResource");
 		CategoryInformationDelegate categoryInfoDelegate = new CategoryInformationDelegate();
 		return Response.ok()
-				.entity(categoryInfoDelegate.getCategoryInformation())
-				.build();
+				.entity(categoryInfoDelegate.getCategoryInformation()).build();
 	}
-
 
 	@POST
 	@Path("/searchondetails")

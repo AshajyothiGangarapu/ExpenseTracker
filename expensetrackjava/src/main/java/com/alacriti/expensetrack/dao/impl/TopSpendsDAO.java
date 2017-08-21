@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.alacriti.expensetrack.model.vo.ExpenseInformation;
 
 public class TopSpendsDAO extends BaseDAO {
@@ -16,6 +19,8 @@ public class TopSpendsDAO extends BaseDAO {
 	public TopSpendsDAO() {
 
 	}
+
+	private static final Logger log = Logger.getLogger(TopSpendsDAO.class);
 
 	public List<ExpenseInformation> getTopSpends(String loginId)
 			throws DAOException {
@@ -34,18 +39,16 @@ public class TopSpendsDAO extends BaseDAO {
 			list = new ArrayList<ExpenseInformation>();
 
 			while (rs.next()) {
-
 				ExpenseInformation expenseInfo = new ExpenseInformation();
-
 				expenseInfo.setCategory(rs.getString("category_name"));
 				expenseInfo.setPrice(rs.getDouble("spend_amount"));
 				list.add(expenseInfo);
-
+				log.debug("in TopSpendsDAO");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-
+			log.error("SQL Exception in TopSpendsDAO" + e.getMessage());
 			throw new DAOException("SQLException in getUserRole():", e);
 		} finally {
 			close(stmt, rs);
@@ -59,6 +62,8 @@ public class TopSpendsDAO extends BaseDAO {
 			return connection.prepareStatement(sqlCmd);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("Exception in getPreparedStatementGetTopSpends "
+					+ e.getMessage());
 			throw e;
 		}
 	}

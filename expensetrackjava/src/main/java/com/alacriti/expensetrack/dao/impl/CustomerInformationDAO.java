@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 import com.alacriti.expensetrack.model.vo.CustomerInformation;
 import com.alacriti.expensetrack.model.vo.Validation;
 
@@ -18,10 +20,15 @@ public class CustomerInformationDAO extends BaseDAO {
 		super(conn);
 	}
 
-	public void addCustomerDetails(CustomerInformation customerInfo)
+	private static final Logger log = Logger
+			.getLogger(CustomerInformationDAO.class);
+
+	public boolean addCustomerDetails(CustomerInformation customerInfo)
 			throws DAOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+		boolean flag = false;
+		int updatedRows =0;
 
 		try {
 			String sqlCmd = "sqlCmd";
@@ -33,42 +40,53 @@ public class CustomerInformationDAO extends BaseDAO {
 			stmt.setDate(4, customerInfo.getDateOfBirth());
 			stmt.setString(5, customerInfo.getLoginId());
 			stmt.setString(6, customerInfo.getPassword());
-			
-			stmt.executeUpdate();
+			log.debug("in CustomerInformationDAO");
+			updatedRows=stmt.executeUpdate();
+			if(updatedRows>0)
+			{
+				flag=true;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("SQL Exception in CustomerInformationDAO.addCustomerDetails"
+					+ e.getMessage());
 			throw new DAOException("SQLException in createUserRole():", e);
 		} finally {
 			close(stmt, rs);
 		}
+		return flag;
 	}
 
 	public Validation getCustomerDetails(CustomerInformation customerInfo)
 			throws DAOException {
 		Statement stmt = null;
 		ResultSet rs = null;
-		Validation validation=null;
+		Validation validation = null;
 
 		try {
 			String loginId = customerInfo.getLoginId();
 			String password = customerInfo.getPassword();
-			String sqlCmd ="select  password from ashajyothig_expensetracker_customer_information where login_id='"+loginId+"'";
-			stmt = getPreparedStatementGetCustomer(getConnection(),sqlCmd);
+			String sqlCmd = "select  password,first_name from ashajyothig_expensetracker_customer_information where login_id='"
+					+ loginId + "'";
+			stmt = getPreparedStatementGetCustomer(getConnection(), sqlCmd);
 			rs = stmt.executeQuery(sqlCmd);
-			//validation=new Validation();
+			// validation=new Validation();
 			if (rs.next()) {
 				if (password.equals(rs.getString("password"))) {
-					System.out.println("Successfully Logged in***" +loginId);
-					validation=new Validation(true, loginId);
+					//validation.setFirstName(rs.getString(2));
+					validation = new Validation(true, loginId,rs.getString(2));
+					System.out.println(rs.getString(2));
 				} else {
-					validation=new Validation(false, loginId);
+					validation = new Validation(false, loginId,rs.getString(2));
 					System.out.println("Invalid Password");
 				}
 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("SQL Exception in CustomerInformationDAO.getCustomerDetails"
+					+ e.getMessage());
 		} finally {
 			close(stmt);
 		}
@@ -83,6 +101,8 @@ public class CustomerInformationDAO extends BaseDAO {
 			return connection.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("Exception in getPreparedStatementGetCustomer"
+					+ e.getMessage());
 			throw e;
 		}
 	}
@@ -94,6 +114,8 @@ public class CustomerInformationDAO extends BaseDAO {
 					.prepareStatement("insert into ashajyothig_expensetracker_customer_information (first_name,last_name,email_id,date_of_birth,login_id,password) values(?,?,?,?,?,?)");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("Exception in getPreparedStatementCreateCustomer"
+					+ e.getMessage());
 			throw e;
 		}
 	}

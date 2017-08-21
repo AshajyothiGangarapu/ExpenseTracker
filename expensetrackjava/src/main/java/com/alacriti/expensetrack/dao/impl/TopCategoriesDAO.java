@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.alacriti.expensetrack.model.vo.ExpenseInformation;
 
 public class TopCategoriesDAO extends BaseDAO {
@@ -16,6 +19,8 @@ public class TopCategoriesDAO extends BaseDAO {
 	public TopCategoriesDAO() {
 
 	}
+
+	private static final Logger log = Logger.getLogger(TopCategoriesDAO.class);
 
 	public List<ExpenseInformation> getTopCategories(String loginId)
 			throws DAOException {
@@ -42,12 +47,12 @@ public class TopCategoriesDAO extends BaseDAO {
 				expenseInfo.setCategory(rs.getString("category_name"));
 				expenseInfo.setPrice(rs.getDouble("spend_ratio"));
 				list.add(expenseInfo);
-
+				log.debug("in TopCategoriesDAO");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-
+			log.error("SQL Exception in TopCategoriesDAO" + e.getMessage());
 			throw new DAOException("SQLException in getUserRole():", e);
 		} finally {
 			close(stmt, rs);
@@ -61,6 +66,8 @@ public class TopCategoriesDAO extends BaseDAO {
 			return connection.prepareStatement(sqlCmd);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("Exception in getPreparedStatementGetTopCategories"
+					+ e.getMessage());
 			throw e;
 		}
 	}

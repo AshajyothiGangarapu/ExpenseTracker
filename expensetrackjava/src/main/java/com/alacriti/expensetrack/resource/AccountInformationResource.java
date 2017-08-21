@@ -20,16 +20,17 @@ public class AccountInformationResource {
 	@Path("account")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addaccountDetails(AccountInformation accountInfo) {
+	public boolean addaccountDetails(AccountInformation accountInfo) {
 		AccountInformationDelegate accountInfoDelegate = new AccountInformationDelegate();
-		accountInfoDelegate.addAccountDetails(accountInfo);
-		return Response.status(200).entity(accountInfo).build();
+		return accountInfoDelegate.addAccountDetails(accountInfo);
 	}
 
 	@GET
 	@Path("account/{LOGIN_ID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAccountInformation(@PathParam("LOGIN_ID") String loginId, @Context HttpServletRequest request) {
+	public Response getAccountInformation(
+			@PathParam("LOGIN_ID") String loginId,
+			@Context HttpServletRequest request) {
 		System.out
 				.println("In getAccountInformation() -> AccountInformationResource");
 		AccountInformationDelegate accountInfoDelegate = new AccountInformationDelegate();

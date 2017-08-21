@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.alacriti.expensetrack.model.vo.CategoryVo;
 
 public class CategoryInformationDAO extends BaseDAO{
@@ -17,6 +19,7 @@ public class CategoryInformationDAO extends BaseDAO{
 	public CategoryInformationDAO(Connection conn) {
 		super(conn);
 	}
+	 private static final Logger log = Logger.getLogger(CategoryInformationDAO.class);
 	public List<CategoryVo> getCategoryInformation()
 			throws DAOException {
 		PreparedStatement stmt = null;
@@ -28,17 +31,19 @@ public class CategoryInformationDAO extends BaseDAO{
 			stmt = getPreparedStatementGetCategoryInfo(getConnection(), sqlCmd);
 			rs = stmt.executeQuery();
 			list = new ArrayList<CategoryVo>();
+			log.debug("in CategoryInformationDAO");
 			while (rs.next()) {
 				CategoryVo categoryInfo = new CategoryVo();
 				categoryInfo.setCategoryId(rs.getInt("category_id"));
 				categoryInfo.setCategoryName(rs.getString("category_name"));
 				list.add(categoryInfo);
+				log.debug(categoryInfo.getCategoryName());
 
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-
+			log.error("SQL Exception in CategoryInformationDAO" + e.getMessage() );
 			throw new DAOException("SQLException in getAccountInformation():",
 					e);
 		} finally {
@@ -53,6 +58,7 @@ public class CategoryInformationDAO extends BaseDAO{
 			return connection.prepareStatement(sqlCmd);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("Exception in getPreparedStatementGetCategoryInfo"+ e.getMessage());
 			throw e;
 		}
 	}
